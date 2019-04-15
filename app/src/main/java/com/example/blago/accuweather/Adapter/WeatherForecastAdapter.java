@@ -1,0 +1,69 @@
+package com.example.blago.accuweather.Adapter;
+
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.example.blago.accuweather.Common.Common;
+import com.example.blago.accuweather.Model.WeatherForcastResult;
+import com.example.blago.accuweather.R;
+import com.squareup.picasso.Picasso;
+
+import java.util.Calendar;
+
+public class WeatherForecastAdapter extends RecyclerView.Adapter<WeatherForecastAdapter.MyViewHolder> {
+
+    Context context;
+    WeatherForcastResult weatherForcastResult;
+
+    public WeatherForecastAdapter(Context context, WeatherForcastResult weatherForcastResult) {
+        this.context = context;
+        this.weatherForcastResult = weatherForcastResult;
+    }
+
+    @NonNull
+    @Override
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(context).inflate(R.layout.item_weather_forecast, parent, false);
+
+        return new MyViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        String temperature;
+
+        Picasso.get().load(new StringBuilder("https://openweathermap.org/img/w/")
+                .append(weatherForcastResult.list.get(position).weather.get(0).getIcon())
+                .append(".png").toString()).into(holder.img_weather);
+
+        temperature = String.valueOf(weatherForcastResult.list.get(position).main.getTemp());
+        holder.txt_temperature.setText(temperature.substring(0, temperature.indexOf(".") + 2) + "°C");
+        holder.txt_time.setText(new StringBuilder(Common.convertUnixToHour(weatherForcastResult.list.get(position).dt)));
+        holder.txt_day_of_week.setText(new StringBuilder(Common.convertUnixToDay(weatherForcastResult.list.get(position).dt)));
+    }
+
+    @Override
+    public int getItemCount() {
+        return weatherForcastResult.list.size();
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+
+        TextView txt_time, txt_temperature, txt_day_of_week;
+        ImageView img_weather;
+
+        public MyViewHolder(View itemView) {
+            super(itemView);
+            img_weather = (ImageView) itemView.findViewById(R.id.img_weather);
+            txt_time = (TextView) itemView.findViewById(R.id.txt_time);
+            txt_temperature = (TextView) itemView.findViewById(R.id.txt_temperature);
+            txt_day_of_week = (TextView) itemView.findViewById(R.id.txt_day_of_week);
+        }
+    }
+}
