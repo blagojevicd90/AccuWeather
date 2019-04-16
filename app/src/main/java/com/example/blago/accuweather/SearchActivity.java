@@ -176,11 +176,12 @@ public class SearchActivity extends AppCompatActivity implements RecyclerItemTou
             searchActivityAdapter.removeItem(deleteIndex);
             db.getmDb().weatherDao().delete(weatherResult);
 
-            Snackbar snackbar = Snackbar.make(nestedScrollView, "removed", Snackbar.LENGTH_LONG);
+            Snackbar snackbar = Snackbar.make(nestedScrollView, "Removed", Snackbar.LENGTH_LONG);
             snackbar.setAction("Undo", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     searchActivityAdapter.restoreItem(weatherResult, deleteIndex);
+                    db.getmDb().weatherDao().insertAll(weatherResult);
                 }
             });
             snackbar.setActionTextColor(Color.YELLOW);
