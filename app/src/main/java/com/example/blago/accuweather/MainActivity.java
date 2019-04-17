@@ -111,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
         }
-        intent();
         viewPager.setAdapter(adapter);
     }
 
@@ -127,15 +126,5 @@ public class MainActivity extends AppCompatActivity {
         db = DBProvider.getInstance(getApplicationContext());
         weatherResult = new ArrayList<>();
         weatherResult.addAll(db.getmDb().weatherDao().getAll());
-    }
-
-    private void intent() {
-        String name = getIntent().getStringExtra("name");
-        for (int i = 0; i < weatherResult.size(); i++) {
-            if (weatherResult.get(i).getName().equalsIgnoreCase(name)) {
-                adapter.getPageTitle(i);
-                adapter.notifyDataSetChanged();
-            }
-        }
     }
 }

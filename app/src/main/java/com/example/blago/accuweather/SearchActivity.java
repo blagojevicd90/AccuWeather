@@ -18,7 +18,6 @@ import com.example.blago.accuweather.Adapter.SearchActivityAdapter;
 import com.example.blago.accuweather.Common.Common;
 import com.example.blago.accuweather.Helper.RecyclerItemTouchHelper;
 import com.example.blago.accuweather.Helper.RecyclerItemTouchHelperListener;
-import com.example.blago.accuweather.Model.Main;
 import com.example.blago.accuweather.Model.WeatherResult;
 import com.example.blago.accuweather.Retrofit.OpenWeatherMap;
 import com.example.blago.accuweather.Retrofit.RetrofitClient;
@@ -68,7 +67,7 @@ public class SearchActivity extends AppCompatActivity implements RecyclerItemTou
                 .subscribe(new Consumer<WeatherResult>() {
                     @Override
                     public void accept(WeatherResult weatherResult) throws Exception {
-                        fillIntentObj(weatherResult);
+                        fillWeatherList(weatherResult);
                         db.getmDb().weatherDao().insertAll(weatherResult);
 
                     }
@@ -127,7 +126,7 @@ public class SearchActivity extends AppCompatActivity implements RecyclerItemTou
         });
     }
 
-    public void fillIntentObj(WeatherResult weatherResult) {
+    public void fillWeatherList(WeatherResult weatherResult) {
         mWeatherResult.add(weatherResult);
         recyclerView.setAdapter(searchActivityAdapter);
         searchActivityAdapter.notifyDataSetChanged();
@@ -155,7 +154,7 @@ public class SearchActivity extends AppCompatActivity implements RecyclerItemTou
                     .subscribe(new Consumer<WeatherResult>() {
                         @Override
                         public void accept(WeatherResult weatherResult) throws Exception {
-                            fillIntentObj(weatherResult);
+                            fillWeatherList(weatherResult);
                         }
                     }, new Consumer<Throwable>() {
                         @Override
@@ -176,7 +175,7 @@ public class SearchActivity extends AppCompatActivity implements RecyclerItemTou
             searchActivityAdapter.removeItem(deleteIndex);
             db.getmDb().weatherDao().delete(weatherResult);
 
-            Snackbar snackbar = Snackbar.make(nestedScrollView, "Removed", Snackbar.LENGTH_LONG);
+            Snackbar snackbar = Snackbar.make(nestedScrollView, "Removed", Snackbar.LENGTH_SHORT);
             snackbar.setAction("Undo", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

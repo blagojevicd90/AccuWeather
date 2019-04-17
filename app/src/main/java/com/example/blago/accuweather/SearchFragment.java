@@ -41,7 +41,7 @@ import retrofit2.Retrofit;
  */
 @SuppressLint("ValidFragment")
 public class SearchFragment extends Fragment {
-    private TextView txt_temperature, txt_description, txt_city_name, txt_sunrise, txt_sunset;
+    private TextView txt_temperature, txt_description, txt_city_name, txt_sunrise, txt_sunset, txt_min_max_temp;
     private RingProgressBar ringProgressBar;
     private WindView windView;
     private NestedScrollView scrollView;
@@ -130,8 +130,14 @@ public class SearchFragment extends Fragment {
     private void fillData(WeatherResult weatherResult) {
         txt_city_name.setText(weatherResult.getName());
         txt_description.setText(weatherResult.getWeather().get(0).getDescription());
-        txt_temperature.setText(new StringBuilder
-                (String.valueOf(weatherResult.getMain().getTemp())).append("°C").toString());
+        String temperature = String.valueOf(weatherResult.getMain().getTemp()).toString();
+        temperature = temperature.substring(0,temperature.indexOf("."));
+        txt_temperature.setText(temperature + "°C");
+        String min_temperature = String.valueOf(weatherResult.getMain().getTemp_min()).toString();
+        min_temperature = min_temperature.substring(0, min_temperature.indexOf("."));
+        String max_temperature = String.valueOf(weatherResult.getMain().getTemp_max()).toString();
+        max_temperature = max_temperature.substring(0, max_temperature.indexOf("."));
+        txt_min_max_temp.setText(min_temperature + "°C" + " " + "/" + " " + max_temperature + "°C");
         txt_sunrise.setText("Sunrise: " + Common.convertUnixToHour(weatherResult.getSys().getSunrise()));
         txt_sunset.setText("Sunset: " + Common.convertUnixToHour(weatherResult.getSys().getSunset()));
         ringProgressBar.setProgress(weatherResult.getMain().getHumidity());
@@ -144,6 +150,7 @@ public class SearchFragment extends Fragment {
     private void initComponents(View itemView) {
         scrollView = (NestedScrollView) itemView.findViewById(R.id.scrollView);
         txt_temperature = (TextView) itemView.findViewById(R.id.txt_temperature);
+        txt_min_max_temp = (TextView) itemView.findViewById(R.id.txt_min_max_temperature);
         txt_sunrise = (TextView) itemView.findViewById(R.id.txt_sunrise);
         txt_sunset = (TextView) itemView.findViewById(R.id.txt_sunset);
         txt_description = (TextView) itemView.findViewById(R.id.txt_description);
