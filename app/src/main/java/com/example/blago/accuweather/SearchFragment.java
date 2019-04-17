@@ -131,7 +131,7 @@ public class SearchFragment extends Fragment {
         txt_city_name.setText(weatherResult.getName());
         txt_description.setText(weatherResult.getWeather().get(0).getDescription());
         String temperature = String.valueOf(weatherResult.getMain().getTemp()).toString();
-        temperature = temperature.substring(0,temperature.indexOf("."));
+        temperature = temperature.substring(0, temperature.indexOf("."));
         txt_temperature.setText(temperature + "°C");
         String min_temperature = String.valueOf(weatherResult.getMain().getTemp_min()).toString();
         min_temperature = min_temperature.substring(0, min_temperature.indexOf("."));
