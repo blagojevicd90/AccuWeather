@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.example.blago.accuweather.Model.WeatherResult;
 import com.example.blago.accuweather.R;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -52,10 +51,8 @@ public class SearchActivityAdapter extends RecyclerView.Adapter<SearchActivityAd
 
         myViewHolder.txt_city_name.setText(weatherResult.get(i).getName());
         myViewHolder.txt_temperature.setText(temperature.substring(0, temperature.indexOf(".") + 2) + "°C");
+        myViewHolder.txt_description.setText(weatherResult.get(i).getWeather().get(0).getDescription());
 
-        Picasso.get().load(new StringBuilder("https://openweathermap.org/img/w/")
-                .append(weatherResult.get(i).getWeather().get(0).getIcon())
-                .append(".png").toString()).into(myViewHolder.img_weather);
     }
 
     @Override
@@ -64,8 +61,7 @@ public class SearchActivityAdapter extends RecyclerView.Adapter<SearchActivityAd
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView txt_city_name, txt_temperature;
-        public ImageView img_weather;
+        public TextView txt_city_name, txt_temperature, txt_description;
         public RelativeLayout foreground, background;
 
 
@@ -73,9 +69,9 @@ public class SearchActivityAdapter extends RecyclerView.Adapter<SearchActivityAd
             super(itemView);
             txt_city_name = (TextView) itemView.findViewById(R.id.txt_city_name);
             txt_temperature = (TextView) itemView.findViewById(R.id.temperature);
-            img_weather = (ImageView) itemView.findViewById(R.id.img_weather);
             foreground = (RelativeLayout) itemView.findViewById(R.id.view_foreground);
             background = (RelativeLayout) itemView.findViewById(R.id.background);
+            txt_description = (TextView) itemView.findViewById(R.id.txt_description);
         }
     }
 }

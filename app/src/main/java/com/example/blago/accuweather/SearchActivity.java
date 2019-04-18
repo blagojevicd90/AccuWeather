@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -38,10 +39,11 @@ public class SearchActivity extends AppCompatActivity implements RecyclerItemTou
     CompositeDisposable compositeDisposable;
     OpenWeatherMap mService;
     private ArrayList<WeatherResult> mWeatherResult;
+    private ImageButton btn_back;
     private RecyclerView recyclerView;
     private NestedScrollView nestedScrollView;
     private SearchActivityAdapter searchActivityAdapter;
-    private Button btn_back;
+    private Button btn_search;
     private MaterialSearchBar searchBar;
     private DBProvider db;
 
@@ -91,7 +93,8 @@ public class SearchActivity extends AppCompatActivity implements RecyclerItemTou
         nestedScrollView = (NestedScrollView) findViewById(R.id.root);
         searchActivityAdapter = new SearchActivityAdapter(getApplicationContext(), mWeatherResult);
         db = DBProvider.getInstance(getApplicationContext());
-        btn_back = (Button) findViewById(R.id.btn_back);
+        btn_back = (ImageButton) findViewById(R.id.btn_back);
+        btn_search = (Button) findViewById(R.id.btn_search);
 
         ItemTouchHelper.SimpleCallback itemTouchHelper
                 = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
@@ -109,10 +112,18 @@ public class SearchActivity extends AppCompatActivity implements RecyclerItemTou
             @Override
             public void onSearchConfirmed(CharSequence text) {
                 getWeatherInformationByName(text.toString());
+                searchBar.setVisibility(View.GONE);
             }
 
             @Override
             public void onButtonClicked(int buttonCode) {
+            }
+        });
+
+        btn_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchBar.setVisibility(View.VISIBLE);
             }
         });
 
