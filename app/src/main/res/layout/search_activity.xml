@@ -3,9 +3,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#284268"
     android:orientation="vertical">
 
+    <com.mancj.materialsearchbar.MaterialSearchBar xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/searchBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        app:mt_hint="Search city"
+        app:mt_textColor="#000000"></com.mancj.materialsearchbar.MaterialSearchBar>
+
+
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -25,6 +40,7 @@
                 android:gravity="start" />
 
             <TextView
+                android:id="@+id/txt_manage_cities"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="25dp"
@@ -37,43 +53,31 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
-    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/root"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="3"
-        android:background="#1F3453"
         android:orientation="vertical">
 
-        <LinearLayout
+        <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#1F3453"
             android:orientation="vertical">
 
-            <com.mancj.materialsearchbar.MaterialSearchBar xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/searchBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:visibility="gone"
-                app:mt_hint="Search city"
-                app:mt_textColor="#000000">
-
-            </com.mancj.materialsearchbar.MaterialSearchBar>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp">
+                android:layout_height="wrap_content">
 
             </android.support.v7.widget.RecyclerView>
 
 
-        </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </LinearLayout>
 
-    </android.support.v4.widget.NestedScrollView>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -91,6 +95,7 @@
             android:background="@drawable/button_shape"
             android:text="Search City"
             android:textColor="#ffffff" />
+
 
     </RelativeLayout>
 

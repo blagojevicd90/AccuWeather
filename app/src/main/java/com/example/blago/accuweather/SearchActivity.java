@@ -3,6 +3,7 @@ package com.example.blago.accuweather;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.blago.accuweather.Adapter.SearchActivityAdapter;
@@ -39,6 +41,7 @@ public class SearchActivity extends AppCompatActivity implements RecyclerItemTou
     CompositeDisposable compositeDisposable;
     OpenWeatherMap mService;
     private ArrayList<WeatherResult> mWeatherResult;
+    private AppBarLayout appBarLayout;
     private ImageButton btn_back;
     private RecyclerView recyclerView;
     private NestedScrollView nestedScrollView;
@@ -90,9 +93,10 @@ public class SearchActivity extends AppCompatActivity implements RecyclerItemTou
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayout.VERTICAL, false));
-        nestedScrollView = (NestedScrollView) findViewById(R.id.root);
+        nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
         searchActivityAdapter = new SearchActivityAdapter(getApplicationContext(), mWeatherResult);
         db = DBProvider.getInstance(getApplicationContext());
+        appBarLayout = (AppBarLayout) findViewById(R.id.appBar);
         btn_back = (ImageButton) findViewById(R.id.btn_back);
         btn_search = (Button) findViewById(R.id.btn_search);
 
@@ -113,6 +117,7 @@ public class SearchActivity extends AppCompatActivity implements RecyclerItemTou
             public void onSearchConfirmed(CharSequence text) {
                 getWeatherInformationByName(text.toString());
                 searchBar.setVisibility(View.GONE);
+                appBarLayout.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -123,6 +128,7 @@ public class SearchActivity extends AppCompatActivity implements RecyclerItemTou
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                appBarLayout.setVisibility(View.GONE);
                 searchBar.setVisibility(View.VISIBLE);
             }
         });

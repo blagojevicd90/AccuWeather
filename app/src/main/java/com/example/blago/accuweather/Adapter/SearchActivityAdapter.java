@@ -11,14 +11,17 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.blago.accuweather.Common.Common;
 import com.example.blago.accuweather.Model.WeatherResult;
 import com.example.blago.accuweather.R;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class SearchActivityAdapter extends RecyclerView.Adapter<SearchActivityAdapter.MyViewHolder> {
     Context context;
     List<WeatherResult> weatherResult;
+    Calendar calendar = Calendar.getInstance();
 
 
     public SearchActivityAdapter(Context context, List<WeatherResult> weatherResult) {
@@ -47,11 +50,23 @@ public class SearchActivityAdapter extends RecyclerView.Adapter<SearchActivityAd
 
     @Override
     public void onBindViewHolder(final MyViewHolder myViewHolder, final int i) {
-        String temperature = String.valueOf(weatherResult.get(i).getMain().getTemp());
+        String temperature = String.valueOf(weatherResult.get(i).getMain().getTemp()).toString();
+        temperature = temperature.substring(0, temperature.indexOf("."));
 
         myViewHolder.txt_city_name.setText(weatherResult.get(i).getName());
-        myViewHolder.txt_temperature.setText(temperature.substring(0, temperature.indexOf(".") + 2) + "°C");
+        myViewHolder.txt_temperature.setText(temperature + "°C");
         myViewHolder.txt_description.setText(weatherResult.get(i).getWeather().get(0).getDescription());
+
+
+        int current_time = calendar.get(Calendar.HOUR_OF_DAY);
+        int sunset = Integer.parseInt(Common.convertUnix(weatherResult.get(i).getSys().getSunrise()));
+        int sunrise = Integer.parseInt(Common.convertUnix(weatherResult.get(i).getSys().getSunset()));
+        if (current_time >= sunset && current_time < sunrise) {
+            myViewHolder.foreground.setBackgroundResource(R.drawable.ic_day);
+        } else {
+            myViewHolder.foreground.setBackgroundResource(R.drawable.ic_night);
+        }
+
 
     }
 
