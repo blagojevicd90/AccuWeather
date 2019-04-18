@@ -120,8 +120,5 @@ public class MainActivity extends AppCompatActivity {
         db = DBProvider.getInstance(getApplicationContext());
         weatherResult = new ArrayList<>();
         weatherResult.addAll(db.getmDb().weatherDao().getAll());
-        if(adapter!=null){
-            adapter.notifyDataSetChanged();
-        }
     }
 }
