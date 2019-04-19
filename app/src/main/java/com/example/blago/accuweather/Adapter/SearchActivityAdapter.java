@@ -63,7 +63,7 @@ public class SearchActivityAdapter extends RecyclerView.Adapter<SearchActivityAd
         if (current_time >= sunset && current_time < sunrise) {
             myViewHolder.foreground.setBackgroundResource(R.drawable.ic_day);
         } else {
-            myViewHolder.foreground.setBackgroundResource(R.drawable.ic_liquid_night);
+            myViewHolder.foreground.setBackgroundResource(R.drawable.ic_night);
         }
 
 
