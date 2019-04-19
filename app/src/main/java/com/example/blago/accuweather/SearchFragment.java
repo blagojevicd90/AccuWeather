@@ -173,9 +173,9 @@ public class SearchFragment extends Fragment {
         int sunset = Integer.parseInt(Common.convertUnix(weatherResult.getSys().getSunrise()));
         int sunrise = Integer.parseInt(Common.convertUnix(weatherResult.getSys().getSunset()));
         if (current_time >= sunset && current_time < sunrise) {
-            scrollView.setBackgroundResource(R.drawable.ic_day);
+            scrollView.setBackgroundResource(R.drawable.after_noon);
         } else {
-            scrollView.setBackgroundResource(R.drawable.ic_night);
+            scrollView.setBackgroundResource(R.drawable.night);
         }
     }
 

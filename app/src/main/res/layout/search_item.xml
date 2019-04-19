@@ -15,7 +15,7 @@
             android:id="@+id/background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#1F3453">
+            android:background="#ffffff">
 
             <ImageView
                 android:id="@+id/delete_icon"
@@ -33,7 +33,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_toLeftOf="@+id/delete_icon"
                 android:text="Delete"
-                android:textColor="#ffffff" />
+                android:textColor="#000000" />
 
         </RelativeLayout>
 

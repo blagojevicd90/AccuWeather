@@ -79,7 +79,16 @@ public class SearchActivity extends AppCompatActivity implements RecyclerItemTou
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        Toast.makeText(getApplicationContext(), "" + "You entered wrong name", Toast.LENGTH_LONG).show();
+                        Snackbar snackbar = Snackbar.make(nestedScrollView, "City with that name doesn't exist", Snackbar.LENGTH_LONG);
+                        snackbar.setAction("Try again", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                appBarLayout.setVisibility(View.GONE);
+                                searchBar.setVisibility(View.VISIBLE);
+                            }
+                        });
+                        snackbar.setActionTextColor(Color.YELLOW);
+                        snackbar.show();
                     }
                 })
         );

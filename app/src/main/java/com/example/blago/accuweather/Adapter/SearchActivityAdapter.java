@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -64,7 +63,7 @@ public class SearchActivityAdapter extends RecyclerView.Adapter<SearchActivityAd
         if (current_time >= sunset && current_time < sunrise) {
             myViewHolder.foreground.setBackgroundResource(R.drawable.ic_day);
         } else {
-            myViewHolder.foreground.setBackgroundResource(R.drawable.ic_night);
+            myViewHolder.foreground.setBackgroundResource(R.drawable.ic_liquid_night);
         }
 
 
