@@ -1,15 +1,18 @@
 package com.example.blago.accuweather;
 
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -17,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.blago.accuweather.Adapter.ViewPagerAdapter;
 import com.example.blago.accuweather.Adapter.WeatherForecastAdapter;
 import com.example.blago.accuweather.Common.Common;
 import com.example.blago.accuweather.Model.WeatherForcastResult;
@@ -26,7 +28,6 @@ import com.example.blago.accuweather.Retrofit.OpenWeatherMap;
 import com.example.blago.accuweather.Retrofit.RetrofitClient;
 import com.github.ahmadnemati.wind.WindView;
 import com.github.ahmadnemati.wind.enums.TrendType;
-import com.squareup.picasso.Picasso;
 
 
 import java.util.Calendar;
@@ -49,6 +50,7 @@ public class TodayWeatherFragment extends Fragment {
     private ImageButton imageButton;
     private RecyclerView recycler_forecast;
     private Calendar calendar;
+    private PopupMenu mpopupMenu;
 
     CompositeDisposable compositeDisposable;
     OpenWeatherMap mService;
@@ -82,9 +84,7 @@ public class TodayWeatherFragment extends Fragment {
         getForecastWeatherInformation();
         addListener();
 
-
         return itemView;
-
 
     }
 
@@ -115,7 +115,7 @@ public class TodayWeatherFragment extends Fragment {
         txt_city_name.setText(weatherResult.getName());
         txt_description.setText(weatherResult.getWeather().get(0).getDescription());
         String temperature = String.valueOf(weatherResult.getMain().getTemp()).toString();
-        temperature = temperature.substring(0,temperature.indexOf("."));
+        temperature = temperature.substring(0, temperature.indexOf("."));
         txt_temperature.setText(temperature + "°C");
         String min_temperature = String.valueOf(weatherResult.getMain().getTemp_min()).toString();
         min_temperature = min_temperature.substring(0, min_temperature.indexOf("."));
@@ -135,12 +135,30 @@ public class TodayWeatherFragment extends Fragment {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), SearchActivity.class);
-                startActivity(intent);
-                getActivity().finish();
-
+                onCreateOptionsMenu();
+                mpopupMenu.show();
             }
         });
+
+        mpopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                popUpMenuItemListener(menuItem);
+                return true;
+            }
+        });
+
+        mpopupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
+            @Override
+            public void onDismiss(PopupMenu popupMenu) {
+                mpopupMenu.getMenu().clear();
+            }
+        });
+    }
+
+    public boolean onCreateOptionsMenu() {
+        getActivity().getMenuInflater().inflate(R.menu.menu, mpopupMenu.getMenu());
+        return true;
     }
 
     private void getForecastWeatherInformation() {
@@ -185,6 +203,7 @@ public class TodayWeatherFragment extends Fragment {
         recycler_forecast.setHasFixedSize(true);
         recycler_forecast.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayout.HORIZONTAL, false));
         imageButton = (ImageButton) itemView.findViewById(R.id.image_button);
+        mpopupMenu = new PopupMenu(getContext(), imageButton);
         ringProgressBar = (RingProgressBar) itemView.findViewById(R.id.circle_progress_bar);
         ringProgressBar.setMax(100);
         windView = (WindView) itemView.findViewById(R.id.windView);
@@ -202,6 +221,21 @@ public class TodayWeatherFragment extends Fragment {
             scrollView.setBackgroundResource(R.drawable.after_noon);
         } else {
             scrollView.setBackgroundResource(R.drawable.night);
+        }
+    }
+
+    public boolean popUpMenuItemListener(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.manage_cities:
+                Intent intent = new Intent(getContext(), SearchActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+                return true;
+            case R.id.settings:
+                Toast.makeText(getContext(), "Settings", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return false;
         }
     }
 }
