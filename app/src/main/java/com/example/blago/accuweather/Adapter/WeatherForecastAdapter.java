@@ -46,7 +46,11 @@ public class WeatherForecastAdapter extends RecyclerView.Adapter<WeatherForecast
                 .append(".png").toString()).into(holder.img_weather);
 
         temperature = String.valueOf(weatherForcastResult.list.get(position).main.getTemp());
-        holder.txt_temperature.setText(temperature.substring(0, temperature.indexOf(".")) + "°C");
+        if(Common.temp_unit.equalsIgnoreCase("metric")) {
+            holder.txt_temperature.setText(temperature.substring(0, temperature.indexOf(".")) + "°C");
+        }else {
+            holder.txt_temperature.setText(temperature.substring(0, temperature.indexOf(".")) + "°F");
+        }
         holder.txt_time.setText(new StringBuilder(Common.convertUnixToHour(weatherForcastResult.list.get(position).dt)));
         holder.txt_day_of_week.setText(new StringBuilder(Common.convertUnixToDay(weatherForcastResult.list.get(position).dt)));
         holder.forecast_layout.setOnClickListener(new View.OnClickListener() {

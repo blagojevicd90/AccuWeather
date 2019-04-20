@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -50,6 +52,7 @@ public class SearchFragment extends Fragment {
     private RecyclerView recycler_forecast;
     private Calendar calendar;
     private WeatherResult mWeatherResult;
+    private PopupMenu mpopupMenu;
 
     CompositeDisposable compositeDisposable;
     OpenWeatherMap mService;
@@ -87,7 +90,7 @@ public class SearchFragment extends Fragment {
     private void getWeatherInformation() {
         compositeDisposable.add(mService.getWeatherByCityName(String.valueOf(mWeatherResult.getName()),
                 Common.API_KEY,
-                "metric")
+                Common.temp_unit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<WeatherResult>() {
@@ -110,7 +113,7 @@ public class SearchFragment extends Fragment {
         compositeDisposable.add(mService.getForecastWeatherByName(
                 String.valueOf(mWeatherResult.getName()),
                 Common.API_KEY,
-                "metric")
+                Common.temp_unit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<WeatherForcastResult>() {
@@ -132,7 +135,11 @@ public class SearchFragment extends Fragment {
         txt_description.setText(weatherResult.getWeather().get(0).getDescription());
         String temperature = String.valueOf(weatherResult.getMain().getTemp()).toString();
         temperature = temperature.substring(0, temperature.indexOf("."));
-        txt_temperature.setText(temperature + "°C");
+        if(Common.temp_unit.equalsIgnoreCase("metric")) {
+            txt_temperature.setText(temperature + "°C");
+        }else {
+            txt_temperature.setText(temperature + "°F");
+        }
         String min_temperature = String.valueOf(weatherResult.getMain().getTemp_min()).toString();
         min_temperature = min_temperature.substring(0, min_temperature.indexOf("."));
         String max_temperature = String.valueOf(weatherResult.getMain().getTemp_max()).toString();
@@ -160,6 +167,7 @@ public class SearchFragment extends Fragment {
         recycler_forecast.setHasFixedSize(true);
         recycler_forecast.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayout.HORIZONTAL, false));
         imageButton = (ImageButton) itemView.findViewById(R.id.image_button);
+        mpopupMenu = new PopupMenu(getContext(), imageButton);
         ringProgressBar = (RingProgressBar) itemView.findViewById(R.id.circle_progress_bar);
         ringProgressBar.setMax(100);
         windView = (WindView) itemView.findViewById(R.id.windView);
@@ -189,10 +197,46 @@ public class SearchFragment extends Fragment {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                onCreateOptionsMenuonCreateOptionsMenu();
+                mpopupMenu.show();
+            }
+        });
+
+        mpopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                popUpMenuItemListener(menuItem);
+                return true;
+            }
+        });
+
+        mpopupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
+            @Override
+            public void onDismiss(PopupMenu popupMenu) {
+                popupMenu.getMenu().clear();
+            }
+        });
+    }
+
+    private boolean onCreateOptionsMenuonCreateOptionsMenu() {
+        getActivity().getMenuInflater().inflate(R.menu.menu, mpopupMenu.getMenu());
+        return true;
+    }
+
+    public boolean popUpMenuItemListener(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.manage_cities:
                 Intent intent = new Intent(getContext(), SearchActivity.class);
                 startActivity(intent);
                 getActivity().finish();
-            }
-        });
+                return true;
+            case R.id.settings:
+                Intent settings = new Intent(getContext(), SettingsActivity.class);
+                startActivity(settings);
+                getActivity().finish();
+                return true;
+            default:
+                return false;
+        }
     }
 }

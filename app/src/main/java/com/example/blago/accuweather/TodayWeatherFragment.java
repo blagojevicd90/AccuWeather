@@ -92,7 +92,7 @@ public class TodayWeatherFragment extends Fragment {
         compositeDisposable.add(mService.getWeatherByLatLng(String.valueOf(Common.current_location.getLatitude()),
                 String.valueOf(Common.current_location.getLongitude()),
                 Common.API_KEY,
-                "metric")
+                Common.temp_unit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<WeatherResult>() {
@@ -116,7 +116,11 @@ public class TodayWeatherFragment extends Fragment {
         txt_description.setText(weatherResult.getWeather().get(0).getDescription());
         String temperature = String.valueOf(weatherResult.getMain().getTemp()).toString();
         temperature = temperature.substring(0, temperature.indexOf("."));
-        txt_temperature.setText(temperature + "°C");
+        if (Common.temp_unit.equalsIgnoreCase("metric")) {
+            txt_temperature.setText(temperature + "°C");
+        } else {
+            txt_temperature.setText(temperature + "°F");
+        }
         String min_temperature = String.valueOf(weatherResult.getMain().getTemp_min()).toString();
         min_temperature = min_temperature.substring(0, min_temperature.indexOf("."));
         String max_temperature = String.valueOf(weatherResult.getMain().getTemp_max()).toString();
@@ -166,7 +170,7 @@ public class TodayWeatherFragment extends Fragment {
                 String.valueOf(Common.current_location.getLatitude()),
                 String.valueOf(Common.current_location.getLongitude()),
                 Common.API_KEY,
-                "metric")
+                Common.temp_unit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<WeatherForcastResult>() {
@@ -232,7 +236,9 @@ public class TodayWeatherFragment extends Fragment {
                 getActivity().finish();
                 return true;
             case R.id.settings:
-                Toast.makeText(getContext(), "Settings", Toast.LENGTH_SHORT).show();
+                Intent settings = new Intent(getContext(), SettingsActivity.class);
+                startActivity(settings);
+                getActivity().finish();
                 return true;
             default:
                 return false;

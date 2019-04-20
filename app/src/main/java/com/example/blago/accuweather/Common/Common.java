@@ -10,6 +10,7 @@ public class Common {
 
     public static final String API_KEY = "60d5387adf37033dda635ca536d16ebf";
     public static Location current_location = null;
+    public static String temp_unit = "metric";
 
     public static String convertUnixToDate(long dt) {
         Date date = new Date(dt*1000L);
