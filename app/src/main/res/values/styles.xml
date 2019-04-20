@@ -9,4 +9,9 @@
     </style>
 
 
+    <style name="CustomTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/green</item>
+    </style>
+
 </resources>

@@ -66,7 +66,7 @@ public class SearchActivity extends AppCompatActivity implements RecyclerItemTou
     private void getWeatherInformationByName(String name) {
         compositeDisposable.add(mService.getWeatherByCityName(name,
                 Common.API_KEY,
-                "metric")
+                Common.temp_unit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<WeatherResult>() {
@@ -174,7 +174,7 @@ public class SearchActivity extends AppCompatActivity implements RecyclerItemTou
             weatherResult = weather_results.get(i);
             compositeDisposable.add(mService.getWeatherByCityName(weatherResult.getName(),
                     Common.API_KEY,
-                    "metric")
+                    Common.temp_unit)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Consumer<WeatherResult>() {

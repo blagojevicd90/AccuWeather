@@ -118,7 +118,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="15dp"
-            android:theme="@style/Base.ThemeOverlay.AppCompat.Dialog" />
+            android:theme="@style/CustomTheme"/>
 
 
     </RelativeLayout>

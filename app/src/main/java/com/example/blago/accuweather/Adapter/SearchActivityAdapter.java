@@ -53,7 +53,11 @@ public class SearchActivityAdapter extends RecyclerView.Adapter<SearchActivityAd
         temperature = temperature.substring(0, temperature.indexOf("."));
 
         myViewHolder.txt_city_name.setText(weatherResult.get(i).getName());
-        myViewHolder.txt_temperature.setText(temperature + "°C");
+        if (Common.temp_unit.equalsIgnoreCase("metric")) {
+            myViewHolder.txt_temperature.setText(temperature + "°C");
+        } else {
+            myViewHolder.txt_temperature.setText(temperature + "°F");
+        }
         myViewHolder.txt_description.setText(weatherResult.get(i).getWeather().get(0).getDescription());
 
 
