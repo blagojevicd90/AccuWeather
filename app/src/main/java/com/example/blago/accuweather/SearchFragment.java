@@ -235,6 +235,10 @@ public class SearchFragment extends Fragment {
                 startActivity(settings);
                 getActivity().finish();
                 return true;
+            case R.id.weather_widget:
+                Intent weather_widget = new Intent(getContext(), WeatherWidgetActivity.class);
+                startActivity(weather_widget);
+                getActivity().finish();
             default:
                 return false;
         }

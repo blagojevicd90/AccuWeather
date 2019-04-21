@@ -12,4 +12,11 @@
 
     </item>
 
+    <item
+        android:id="@+id/weather_widget"
+        android:title="Weather widget">
+
+    </item>
+
+
 </menu>

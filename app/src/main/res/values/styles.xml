@@ -14,4 +14,13 @@
         <item name="colorPrimary">@color/green</item>
     </style>
 
+    <style name="Dexter.Internal.Theme.Transparent." parent="android:Theme">
+        <!-- Customize your theme here. -->
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
 </resources>

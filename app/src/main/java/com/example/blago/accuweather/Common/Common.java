@@ -2,6 +2,9 @@ package com.example.blago.accuweather.Common;
 
 import android.location.Location;
 
+import org.joda.time.DateTimeUtils;
+import org.joda.time.format.DateTimeFormat;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,7 +19,6 @@ public class Common {
         Date date = new Date(dt*1000L);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm dd EEE MM yyyy");
         String formatted = simpleDateFormat.format(date);
-
         return formatted;
     }
 
@@ -41,6 +43,13 @@ public class Common {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE");
         String formatted = simpleDateFormat.format(date);
 
+        return formatted;
+    }
+
+    public static String convertUnixToDayTime(long dt){
+        Date date = new Date(dt*1000L);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, dd.MM.yyyy");
+        String formatted = simpleDateFormat.format(date);
         return formatted;
     }
 }

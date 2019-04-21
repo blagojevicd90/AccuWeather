@@ -88,9 +88,10 @@
                         </option>
                         <option name="values">
                           <map>
+                            <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_keyboard_arrow_right_white_24dp" />
-                            <entry key="sourceFile" value="C:\Users\blago\Desktop\Liquid-Cheese (9).svg" />
+                            <entry key="outputName" value="ic_circle_shape_blue" />
+                            <entry key="sourceFile" value="C:\Users\blago\Desktop\record.svg" />
                           </map>
                         </option>
                       </PersistentState>
