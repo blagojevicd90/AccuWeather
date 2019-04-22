@@ -2,6 +2,7 @@ package com.example.blago.accuweather.Widget;
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -37,10 +38,6 @@ public class WeatherWidget extends AppWidgetProvider {
         // Construct the RemoteViews object
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.weather_widget);
-         ArrayList<WeatherResult> mweatherResults = new ArrayList<>();
-
-        views.setTextViewText(R.id.txt_temp, "Belgrade");
-        views.setTextViewText(R.id.txt_location, "13°C");
 
 
         // Instruct the widget manager to update the widget

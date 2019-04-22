@@ -1,5 +1,8 @@
 package com.example.blago.accuweather;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import com.example.blago.accuweather.Adapter.WidgetActivityAdapter;
@@ -18,6 +22,7 @@ import com.example.blago.accuweather.Helper.RecyclerTouchListener;
 import com.example.blago.accuweather.Model.WeatherResult;
 import com.example.blago.accuweather.Retrofit.OpenWeatherMap;
 import com.example.blago.accuweather.Retrofit.RetrofitClient;
+import com.example.blago.accuweather.Widget.WeatherWidget;
 import com.example.blago.accuweather.db.DBProvider;
 import com.squareup.picasso.Picasso;
 
@@ -40,7 +45,7 @@ public class WeatherWidgetActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RelativeLayout relativeLayout;
     private ImageView img_weather;
-
+    private WeatherResult weatherResult;
     private CompositeDisposable compositeDisposable;
     private OpenWeatherMap mService;
     private Retrofit retrofitClient;
@@ -58,6 +63,7 @@ public class WeatherWidgetActivity extends AppCompatActivity {
     private void initComponents() {
         compositeDisposable = new CompositeDisposable();
         retrofitClient = RetrofitClient.getInstance();
+        weatherResult = new WeatherResult();
         mService = retrofitClient.create(OpenWeatherMap.class);
         btn_back = (ImageButton) findViewById(R.id.btn_back);
         relativeLayout = (RelativeLayout) findViewById(R.id.widget);
@@ -86,10 +92,9 @@ public class WeatherWidgetActivity extends AppCompatActivity {
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                if (relativeLayout.getVisibility() == View.GONE) {
-                    relativeLayout.setVisibility(View.VISIBLE);
-                }
                 fillComponents(position);
+                weatherResult = mweatherResults.get(position);
+                updateWidget();
             }
 
             @Override
@@ -148,4 +153,26 @@ public class WeatherWidgetActivity extends AppCompatActivity {
                 .append(".png").toString()).into(img_weather);
     }
 
+    private void updateWidget(){
+        String temperature = String.valueOf(weatherResult.getMain().getTemp()).toString();
+        temperature = temperature.substring(0, temperature.indexOf("."));
+        Context context = getApplicationContext();
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.weather_widget);
+        ComponentName thisWidget = new ComponentName(context, WeatherWidget.class);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
+        remoteViews.setTextViewText(R.id.txt_location, weatherResult.getName());
+        remoteViews.setTextViewText(R.id.txt_time, Common.convertUnixToHour(weatherResult.getDt()));
+        remoteViews.setTextViewText(R.id.txt_date_time, Common.convertUnixToDayTime(weatherResult.getDt()));
+        if(Common.temp_unit.equalsIgnoreCase("metric")){
+            remoteViews.setTextViewText(R.id.txt_temp, temperature + "°C");
+        }else {
+            remoteViews.setTextViewText(R.id.txt_temp, temperature + "°F");
+        }
+        Picasso.get().load(new StringBuilder("https://openweathermap.org/img/w/")
+                .append(weatherResult.getWeather().get(0).getIcon())
+                .append(".png").toString()).into(remoteViews, R.id.img_weather, appWidgetIds);
+
+        appWidgetManager.updateAppWidget(thisWidget, remoteViews);
+    }
 }
