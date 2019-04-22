@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.example.blago.accuweather.Model.WeatherResult;
 import com.example.blago.accuweather.R;
 
-import java.util.Calendar;
 import java.util.List;
 
 public class WidgetActivityAdapter extends RecyclerView.Adapter<WidgetActivityAdapter.MyViewHolder> {
@@ -62,6 +61,14 @@ public class WidgetActivityAdapter extends RecyclerView.Adapter<WidgetActivityAd
             linearLayout = (LinearLayout) itemView.findViewById(R.id.widget_item);
 
             linearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    lastSelectedPosition = getAdapterPosition();
+                    notifyDataSetChanged();
+                }
+            });
+
+            radioButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     lastSelectedPosition = getAdapterPosition();
