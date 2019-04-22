@@ -1,21 +1,17 @@
 package com.example.blago.accuweather.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.example.blago.accuweather.Model.WeatherResult;
 import com.example.blago.accuweather.R;
-import com.example.blago.accuweather.WeatherWidgetActivity;
 
 import java.util.Calendar;
 import java.util.List;
@@ -24,7 +20,7 @@ public class WidgetActivityAdapter extends RecyclerView.Adapter<WidgetActivityAd
 
     Context context;
     List<WeatherResult> weatherResult;
-    Calendar calendar = Calendar.getInstance();
+    private int lastSelectedPosition = -1;
 
 
     public WidgetActivityAdapter(Context context, List<WeatherResult> weatherResult) {
@@ -41,8 +37,9 @@ public class WidgetActivityAdapter extends RecyclerView.Adapter<WidgetActivityAd
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final WidgetActivityAdapter.MyViewHolder myViewHolder, int i) {
+    public void onBindViewHolder(@NonNull WidgetActivityAdapter.MyViewHolder myViewHolder, int i) {
         myViewHolder.txt_location.setText(weatherResult.get(i).getName());
+        myViewHolder.radioButton.setChecked(lastSelectedPosition == i);
 
     }
 
@@ -51,18 +48,26 @@ public class WidgetActivityAdapter extends RecyclerView.Adapter<WidgetActivityAd
         return weatherResult.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView txt_location;
-        ImageView img_circle;
+        RadioButton radioButton;
         LinearLayout linearLayout;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             txt_location = (TextView) itemView.findViewById(R.id.txt_location);
-            img_circle = (ImageView) itemView.findViewById(R.id.img_circle);
+            radioButton = (RadioButton) itemView.findViewById(R.id.img_circle);
             linearLayout = (LinearLayout) itemView.findViewById(R.id.widget_item);
+
+            linearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    lastSelectedPosition = getAdapterPosition();
+                    notifyDataSetChanged();
+                }
+            });
         }
     }
 }

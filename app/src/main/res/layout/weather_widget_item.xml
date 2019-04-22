@@ -20,12 +20,11 @@
             android:textSize="20dp" />
 
 
-            <ImageView
+            <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerInParent="true"
-                android:background="@drawable/ic_circle_shape"
                 android:id="@+id/img_circle" />
 
     </RelativeLayout>

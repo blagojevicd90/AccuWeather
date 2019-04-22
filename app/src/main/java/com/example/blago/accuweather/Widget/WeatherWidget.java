@@ -13,6 +13,7 @@ import com.example.blago.accuweather.R;
 import com.example.blago.accuweather.Retrofit.OpenWeatherMap;
 import com.example.blago.accuweather.Retrofit.RetrofitClient;
 import com.example.blago.accuweather.db.DBProvider;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -38,8 +39,8 @@ public class WeatherWidget extends AppWidgetProvider {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.weather_widget);
          ArrayList<WeatherResult> mweatherResults = new ArrayList<>();
 
-        views.setTextViewText(R.id.appwidget_text, "Belgrade");
-        views.setTextViewText(R.id.appwidget_temp, "13°C");
+        views.setTextViewText(R.id.txt_temp, "Belgrade");
+        views.setTextViewText(R.id.txt_location, "13°C");
 
 
         // Instruct the widget manager to update the widget

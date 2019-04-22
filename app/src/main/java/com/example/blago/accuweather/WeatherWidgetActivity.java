@@ -21,9 +21,6 @@ import com.example.blago.accuweather.Retrofit.RetrofitClient;
 import com.example.blago.accuweather.db.DBProvider;
 import com.squareup.picasso.Picasso;
 
-import org.joda.time.DateTimeUtils;
-import org.joda.time.JodaTimePermission;
-import org.joda.time.format.DateTimeFormat;
 
 import java.util.ArrayList;
 
