@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<WeatherResult> weatherResult;
     private ViewPagerAdapter adapter;
     private DBProvider db;
+    private ArrayList<Common> common;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
     private void fillListFromDb() {
         db = DBProvider.getInstance(getApplicationContext());
         weatherResult = new ArrayList<>();
-        weatherResult.addAll(db.getmDb().weatherDao().getAll());
+        weatherResult.addAll(db.getmDb().weatherDao().getAllWeatherResult());
     }
 
     private void dexter() {
@@ -128,6 +129,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initComponents() {
+        common = new ArrayList<>();
+        common.addAll(db.getmDb().weatherDao().getCommons());
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.root_view);
+        if (common.size() == 0) {
+            Common common = new Common();
+            common.setTemp_unit("metric");
+            db.getmDb().weatherDao().insertCommon(common);
+        }
+
     }
 }

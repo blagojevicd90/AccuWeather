@@ -13,7 +13,9 @@ import android.widget.TextView;
 import com.example.blago.accuweather.Common.Common;
 import com.example.blago.accuweather.Model.WeatherResult;
 import com.example.blago.accuweather.R;
+import com.example.blago.accuweather.db.DBProvider;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -21,11 +23,16 @@ public class SearchActivityAdapter extends RecyclerView.Adapter<SearchActivityAd
     Context context;
     List<WeatherResult> weatherResult;
     Calendar calendar = Calendar.getInstance();
+    DBProvider db;
+    ArrayList<Common> common;
 
 
     public SearchActivityAdapter(Context context, List<WeatherResult> weatherResult) {
         this.context = context;
         this.weatherResult = weatherResult;
+        db = DBProvider.getInstance(context);
+        common = new ArrayList<>();
+        common.addAll(db.getmDb().weatherDao().getCommons());
     }
 
     @NonNull
@@ -53,7 +60,7 @@ public class SearchActivityAdapter extends RecyclerView.Adapter<SearchActivityAd
         temperature = temperature.substring(0, temperature.indexOf("."));
 
         myViewHolder.txt_city_name.setText(weatherResult.get(i).getName());
-        if (Common.temp_unit.equalsIgnoreCase("metric")) {
+        if (common.get(0).getTemp_unit().equalsIgnoreCase("metric")) {
             myViewHolder.txt_temperature.setText(temperature + "°C");
         } else {
             myViewHolder.txt_temperature.setText(temperature + "°F");

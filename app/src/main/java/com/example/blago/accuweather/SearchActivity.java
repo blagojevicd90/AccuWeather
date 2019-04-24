@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.blago.accuweather.Adapter.SearchActivityAdapter;
@@ -49,6 +48,7 @@ public class SearchActivity extends AppCompatActivity implements RecyclerItemTou
     private Button btn_search;
     private MaterialSearchBar searchBar;
     private DBProvider db;
+    private ArrayList <Common> common;
 
 
     @Override
@@ -66,7 +66,7 @@ public class SearchActivity extends AppCompatActivity implements RecyclerItemTou
     private void getWeatherInformationByName(String name) {
         compositeDisposable.add(mService.getWeatherByCityName(name,
                 Common.API_KEY,
-                Common.temp_unit)
+                common.get(0).getTemp_unit())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<WeatherResult>() {
@@ -96,6 +96,7 @@ public class SearchActivity extends AppCompatActivity implements RecyclerItemTou
 
     private void initComponents() {
         compositeDisposable = new CompositeDisposable();
+        common = new ArrayList<>();
         Retrofit retrofit = RetrofitClient.getInstance();
         mService = retrofit.create(OpenWeatherMap.class);
         searchBar = (MaterialSearchBar) findViewById(R.id.searchBar);
@@ -105,6 +106,7 @@ public class SearchActivity extends AppCompatActivity implements RecyclerItemTou
         nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
         searchActivityAdapter = new SearchActivityAdapter(getApplicationContext(), mWeatherResult);
         db = DBProvider.getInstance(getApplicationContext());
+        common.addAll(db.getmDb().weatherDao().getCommons());
         appBarLayout = (AppBarLayout) findViewById(R.id.appBar);
         btn_back = (ImageButton) findViewById(R.id.btn_back);
         btn_search = (Button) findViewById(R.id.btn_search);
@@ -169,12 +171,12 @@ public class SearchActivity extends AppCompatActivity implements RecyclerItemTou
     private void getWeatherInfromationFromDb() {
         ArrayList<WeatherResult> weather_results = new ArrayList<>();
         WeatherResult weatherResult;
-        weather_results.addAll(db.getmDb().weatherDao().getAll());
+        weather_results.addAll(db.getmDb().weatherDao().getAllWeatherResult());
         for (int i = 0; i < weather_results.size(); i++) {
             weatherResult = weather_results.get(i);
             compositeDisposable.add(mService.getWeatherByCityName(weatherResult.getName(),
                     Common.API_KEY,
-                    Common.temp_unit)
+                    common.get(0).getTemp_unit())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Consumer<WeatherResult>() {

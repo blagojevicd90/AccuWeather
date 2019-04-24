@@ -49,6 +49,7 @@ public class WeatherWidgetActivity extends AppCompatActivity {
     private CompositeDisposable compositeDisposable;
     private OpenWeatherMap mService;
     private Retrofit retrofitClient;
+    private ArrayList <Common> common;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +78,8 @@ public class WeatherWidgetActivity extends AppCompatActivity {
         db = DBProvider.getInstance(getApplicationContext());
         mweatherResults = new ArrayList<>();
         img_weather = (ImageView) findViewById(R.id.img_weather);
+        common = new ArrayList<>();
+        common.addAll(db.getmDb().weatherDao().getCommons());
     }
 
     private void addListener() {
@@ -107,11 +110,11 @@ public class WeatherWidgetActivity extends AppCompatActivity {
 
     private void getWeatherLocations() {
         ArrayList<WeatherResult> list = new ArrayList<>();
-        list.addAll(db.getmDb().weatherDao().getAll());
+        list.addAll(db.getmDb().weatherDao().getAllWeatherResult());
         for (int i = 0; i < list.size(); i++) {
             compositeDisposable.add(mService.getWeatherByCityName(String.valueOf(list.get(i).getName()),
                     Common.API_KEY,
-                    Common.temp_unit)
+                    common.get(0).getTemp_unit())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Consumer<WeatherResult>() {
@@ -143,7 +146,7 @@ public class WeatherWidgetActivity extends AppCompatActivity {
         txt_time.setText(Common.convertUnixToHour(mweatherResults.get(position).getDt()));
         txt_date.setText(Common.convertUnixToDayTime(mweatherResults.get(position).getDt()));
 
-        if (Common.temp_unit.equalsIgnoreCase("metric")) {
+        if (common.get(0).getTemp_unit().equalsIgnoreCase("metric")) {
             txt_temp.setText(temperature + "°C");
         } else {
             txt_temp.setText(temperature + "°F");
@@ -164,7 +167,7 @@ public class WeatherWidgetActivity extends AppCompatActivity {
         remoteViews.setTextViewText(R.id.txt_location, weatherResult.getName());
         remoteViews.setTextViewText(R.id.txt_time, Common.convertUnixToHour(weatherResult.getDt()));
         remoteViews.setTextViewText(R.id.txt_date_time, Common.convertUnixToDayTime(weatherResult.getDt()));
-        if(Common.temp_unit.equalsIgnoreCase("metric")){
+        if(common.get(0).getTemp_unit().equalsIgnoreCase("metric")){
             remoteViews.setTextViewText(R.id.txt_temp, temperature + "°C");
         }else {
             remoteViews.setTextViewText(R.id.txt_temp, temperature + "°F");

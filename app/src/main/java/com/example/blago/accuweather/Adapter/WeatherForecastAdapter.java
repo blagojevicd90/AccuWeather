@@ -15,18 +15,25 @@ import android.widget.TextView;
 import com.example.blago.accuweather.Common.Common;
 import com.example.blago.accuweather.Model.WeatherForcastResult;
 import com.example.blago.accuweather.R;
+import com.example.blago.accuweather.db.DBProvider;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class WeatherForecastAdapter extends RecyclerView.Adapter<WeatherForecastAdapter.MyViewHolder> {
 
     Context context;
     WeatherForcastResult weatherForcastResult;
+    DBProvider db;
+    ArrayList <Common> common;
 
     public WeatherForecastAdapter(Context context, WeatherForcastResult weatherForcastResult) {
         this.context = context;
         this.weatherForcastResult = weatherForcastResult;
+        db = DBProvider.getInstance(context);
+        common = new ArrayList<>();
+        common.addAll(db.getmDb().weatherDao().getCommons());
     }
 
     @NonNull
@@ -46,7 +53,7 @@ public class WeatherForecastAdapter extends RecyclerView.Adapter<WeatherForecast
                 .append(".png").toString()).into(holder.img_weather);
 
         temperature = String.valueOf(weatherForcastResult.list.get(position).main.getTemp());
-        if(Common.temp_unit.equalsIgnoreCase("metric")) {
+        if(common.get(0).getTemp_unit().equalsIgnoreCase("metric")) {
             holder.txt_temperature.setText(temperature.substring(0, temperature.indexOf(".")) + "°C");
         }else {
             holder.txt_temperature.setText(temperature.substring(0, temperature.indexOf(".")) + "°F");

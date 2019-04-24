@@ -25,9 +25,11 @@ import com.example.blago.accuweather.Model.WeatherForcastResult;
 import com.example.blago.accuweather.Model.WeatherResult;
 import com.example.blago.accuweather.Retrofit.OpenWeatherMap;
 import com.example.blago.accuweather.Retrofit.RetrofitClient;
+import com.example.blago.accuweather.db.DBProvider;
 import com.github.ahmadnemati.wind.WindView;
 import com.github.ahmadnemati.wind.enums.TrendType;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
@@ -51,6 +53,8 @@ public class SearchFragment extends Fragment {
     private ImageButton imageButton;
     private RecyclerView recycler_forecast;
     private Calendar calendar;
+    private DBProvider db;
+    private ArrayList <Common> common;
     private WeatherResult mWeatherResult;
     private PopupMenu mpopupMenu;
 
@@ -90,7 +94,7 @@ public class SearchFragment extends Fragment {
     private void getWeatherInformation() {
         compositeDisposable.add(mService.getWeatherByCityName(String.valueOf(mWeatherResult.getName()),
                 Common.API_KEY,
-                Common.temp_unit)
+                common.get(0).getTemp_unit())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<WeatherResult>() {
@@ -113,7 +117,7 @@ public class SearchFragment extends Fragment {
         compositeDisposable.add(mService.getForecastWeatherByName(
                 String.valueOf(mWeatherResult.getName()),
                 Common.API_KEY,
-                Common.temp_unit)
+                common.get(0).getTemp_unit())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<WeatherForcastResult>() {
@@ -135,7 +139,7 @@ public class SearchFragment extends Fragment {
         txt_description.setText(weatherResult.getWeather().get(0).getDescription());
         String temperature = String.valueOf(weatherResult.getMain().getTemp()).toString();
         temperature = temperature.substring(0, temperature.indexOf("."));
-        if(Common.temp_unit.equalsIgnoreCase("metric")) {
+        if(common.get(0).getTemp_unit().equalsIgnoreCase("metric")) {
             txt_temperature.setText(temperature + "°C");
         }else {
             txt_temperature.setText(temperature + "°F");
@@ -174,6 +178,9 @@ public class SearchFragment extends Fragment {
         windView.setWindSpeedUnit(" km/h");
         windView.setPressureUnit(" in hpa");
         calendar = Calendar.getInstance();
+        common = new ArrayList<>();
+        db = DBProvider.getInstance(getContext());
+        common.addAll(db.getmDb().weatherDao().getCommons());
     }
 
     private void setBackgroundScreen(WeatherResult weatherResult) {
