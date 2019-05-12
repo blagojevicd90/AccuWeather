@@ -39,6 +39,7 @@ public class WeatherWidget extends AppWidgetProvider {
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.weather_widget);
 
+        views.setTextViewText(R.id.txt_location, "sdsds");
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);

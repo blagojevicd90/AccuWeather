@@ -11,11 +11,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.blago.accuweather.Common.Common;
+import com.example.blago.accuweather.Dialog.Dialog;
 import com.example.blago.accuweather.db.DBProvider;
 
 import java.util.ArrayList;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity implements Dialog.DialogListener {
 
     private ImageButton btn_back;
     private RelativeLayout tmp_unit;
@@ -61,29 +62,35 @@ public class SettingsActivity extends AppCompatActivity {
         tmp_unit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (common.get(0).getTemp_unit().equalsIgnoreCase("metric")) {
-                    String imperial = "imperial";
-                    common.get(0).setTemp_unit(imperial);
-                    txt_unit.setText("°F");
-                } else {
-                    common.get(0).setTemp_unit("metric");
-                    txt_unit.setText("°C");
-                }
+                openDialog();
             }
         });
     }
 
     private void setTempUnit() {
-        if (txt_unit.getText().toString().equalsIgnoreCase("°F")) {
-            db.getmDb().weatherDao().deleteCommon(common.get(0));
-            Common commons = new Common();
-            commons.setTemp_unit("imperial");
-            db.getmDb().weatherDao().insertCommon(commons);
+        String tempUnit;
+        int position;
+        if (txt_unit.getText().toString().equalsIgnoreCase("°C")) {
+            tempUnit = "metric";
+            position = 1;
         } else {
-            db.getmDb().weatherDao().deleteCommon(common.get(0));
-            Common commons = new Common();
-            commons.setTemp_unit("metric");
-            db.getmDb().weatherDao().insertCommon(commons);
+            tempUnit = "imperial";
+            position = 2;
         }
+        db.getmDb().weatherDao().deleteCommon(common.get(0));
+        Common commons = new Common();
+        commons.setTemp_unit(tempUnit);
+        commons.setDialogPosition(position);
+        db.getmDb().weatherDao().insertCommon(commons);
+    }
+
+    private void openDialog() {
+        Dialog dialog = new Dialog();
+        dialog.show(getSupportFragmentManager(), "dialog");
+    }
+
+    @Override
+    public void applyText(String tempUnit) {
+        txt_unit.setText(tempUnit);
     }
 }

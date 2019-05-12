@@ -17,18 +17,19 @@ public class Common {
     public static final String API_KEY = "60d5387adf37033dda635ca536d16ebf";
     public static Location current_location = null;
     private String temp_unit;
+    private int dialogPosition;
     @PrimaryKey(autoGenerate = true)
     private int id;
-    private String name = "key";
 
     public Common() {
     }
-    public String getName() {
-        return name;
+
+    public int getDialogPosition() {
+        return dialogPosition;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDialogPosition(int dialogPosition) {
+        this.dialogPosition = dialogPosition;
     }
 
     public int getId() {
